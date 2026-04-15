@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use ThuliumBridge\Bootstrap;
+
+$autoload = __DIR__ . '/../vendor/autoload.php';
+if (!file_exists($autoload)) {
+    fwrite(STDERR, "Missing vendor/autoload.php. Run: composer install --no-dev --optimize-autoloader\n");
+    exit(1);
+}
+
+require $autoload;
+
+$runner = Bootstrap::createRunner(dirname(__DIR__));
+exit($runner->run($argv));

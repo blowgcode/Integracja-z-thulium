@@ -1,0 +1,12 @@
+[Unit]
+Description=Thulium Bridge Worker (run-once)
+After=network.target mysql.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/thulium-bridge
+ExecStart=/usr/bin/php /opt/thulium-bridge/bin/thulium-bridge run-once
+User=www-data
+Group=www-data
+StandardOutput=journal
+StandardError=journal

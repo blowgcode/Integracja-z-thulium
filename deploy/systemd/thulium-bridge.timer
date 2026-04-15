@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Thulium Bridge in run-once mode every minute
+
+[Timer]
+OnCalendar=*:0/1
+Persistent=true
+Unit=thulium-bridge-once.service
+
+[Install]
+WantedBy=timers.target
