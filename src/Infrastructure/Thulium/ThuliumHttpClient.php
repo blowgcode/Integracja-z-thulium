@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace ThuliumBridge\Infrastructure\Thulium;
 
 use JsonException;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
-use ThuliumBridge\Log\LoggerInterface;
 
 final class ThuliumHttpClient
 {

@@ -34,6 +34,6 @@ final class RunWorkerCommand implements CommandInterface
 
     public function description(): string
     {
-        return 'Run worker in infinite loop';
+        return 'Run worker in infinite loop (systemd/supervisor mode)';
     }
 }

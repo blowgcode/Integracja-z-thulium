@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ThuliumBridge\Queue;
 
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Throwable;
 use ThuliumBridge\Config;
@@ -13,7 +14,6 @@ use ThuliumBridge\Domain\Trip\TripStatusResolver;
 use ThuliumBridge\Infrastructure\MySql\SourceRepository;
 use ThuliumBridge\Infrastructure\Thulium\CustomerFieldGroupGateway;
 use ThuliumBridge\Infrastructure\Thulium\CustomerGatewayInterface;
-use ThuliumBridge\Log\LoggerInterface;
 
 final class QueueWorker
 {

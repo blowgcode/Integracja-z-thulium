@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ThuliumBridge;
 
+use Dotenv\Dotenv;
 use ThuliumBridge\Console\CommandRunner;
 use ThuliumBridge\Console\Commands\DryRunCommand;
 use ThuliumBridge\Console\Commands\HealthCommand;
@@ -21,14 +22,13 @@ use ThuliumBridge\Infrastructure\Thulium\CustomerGateway;
 use ThuliumBridge\Infrastructure\Thulium\ThuliumHttpClient;
 use ThuliumBridge\Queue\QueueRepository;
 use ThuliumBridge\Queue\QueueWorker;
-use ThuliumBridge\Support\Env;
 
 final class Bootstrap
 {
     public static function createRunner(string $rootDir): CommandRunner
     {
         if (file_exists($rootDir . '/.env')) {
-            Env::load($rootDir . '/.env');
+            Dotenv::createImmutable($rootDir)->safeLoad();
         }
 
         $config = new Config(require $rootDir . '/config/config.php');
