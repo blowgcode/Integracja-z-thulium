@@ -1,0 +1,55 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use ThuliumBridge\Bootstrap;
+
+$srcDir = __DIR__ . '/../src';
+$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($srcDir));
+$files = [];
+foreach ($rii as $file) {
+    if ($file->isDir()) {
+        continue;
+    }
+    if ($file->getExtension() !== 'php') {
+        continue;
+    }
+    $files[] = $file->getPathname();
+}
+sort($files);
+foreach ($files as $file) {
+    if (str_ends_with($file, 'Interface.php')) {
+        require_once $file;
+    }
+}
+foreach ($files as $file) {
+    if (str_ends_with($file, 'Interface.php')) {
+        continue;
+    }
+    require_once $file;
+}
+
+$command = $argv[1] ?? 'help';
+if (in_array($command, ['help', '--help', '-h'], true)) {
+    fwrite(STDOUT, "Usage: php bin/thulium-bridge <command>\n\n");
+    fwrite(STDOUT, "Commands:\n");
+    fwrite(STDOUT, "  validate-config  Validate required configuration values\n");
+    fwrite(STDOUT, "  health           Show queue counts (pending/processing/failed/dead/done)\n");
+    fwrite(STDOUT, "  dry-run          Process one batch without external API calls\n");
+    fwrite(STDOUT, "  run-once         Process one batch and exit (cron mode)\n");
+    fwrite(STDOUT, "  run-loop         Run worker in infinite loop\n");
+    fwrite(STDOUT, "  retry-failed     Move failed/dead events back to pending (optional limit arg)\n");
+    fwrite(STDOUT, "  cleanup          Delete old done queue records and old error logs\n");
+    exit(0);
+}
+
+if ($command === 'validate-config') {
+    ThuliumBridge\Support\Env::load(dirname(__DIR__) . '/.env');
+    $config = new ThuliumBridge\Config(require dirname(__DIR__) . '/config/config.php');
+    $cmd = new ThuliumBridge\Console\Commands\ValidateConfigCommand($config);
+    exit($cmd->run(array_slice($argv, 2)));
+}
+
+$runner = Bootstrap::createRunner(dirname(__DIR__));
+exit($runner->run($argv));
